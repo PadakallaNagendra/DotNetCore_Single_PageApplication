@@ -12,6 +12,8 @@ namespace DotNetCore_Single_PageApplication.Repositary
             List<Country> result = new List<Country>();
             using (SqlConnection con = new SqlConnection(connectionstring))
             {
+
+
                 con.Open();
                 SqlCommand cmd = new SqlCommand("Usp_GetCountries", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
