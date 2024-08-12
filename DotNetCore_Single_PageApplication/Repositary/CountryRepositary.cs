@@ -1,5 +1,6 @@
 ﻿using DotNetCore_Single_PageApplication.Entities;
 using DotNetCore_Single_PageApplication.InterFace;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace DotNetCore_Single_PageApplication.Repositary
@@ -7,6 +8,41 @@ namespace DotNetCore_Single_PageApplication.Repositary
     public class CountryRepositary : ICountryRepositary
     {
         string connectionstring = "data source=DESKTOP-NORDVAN\\MSSQLSERVER01;integrated security=sspi;initial catalog=NagendraDB";
+
+        public async Task<bool> AddCountryDetails(Country countryDetail)
+        {
+            using (SqlConnection con = new SqlConnection(connectionstring))//here we are getting the conection string
+            {
+                SqlCommand cmd = new SqlCommand("Usp_AddCountries", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@id", countryDetail.Id);
+                cmd.Parameters.AddWithValue("@countryName", countryDetail.countryName);
+
+                con.Open();
+                await cmd.ExecuteNonQueryAsync();//used for insert,update delete
+                                                 // cmd.ExecuteScalar();//used in aggregation operation[max,min,count..]
+                                                 //cmd.ExecuteReader();//used for fetching the records
+                con.Close();
+            }
+            return true;
+        }
+
+        public async Task<bool> DeleteCountryDetilsById(int id)
+        {
+            using (SqlConnection con = new SqlConnection(connectionstring))
+            {
+                SqlCommand cmd = new SqlCommand("Usp_deleteCountries", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Id", id);
+                con.Open();
+                await cmd.ExecuteNonQueryAsync();
+                con.Close();
+            }
+            return true;
+
+        }
+
         public async Task<List<Country>> GetAllCountry()
         {
             List<Country> result = new List<Country>();
@@ -30,6 +66,46 @@ namespace DotNetCore_Single_PageApplication.Repositary
                 con.Close();
             }
             return result;
+        }
+
+        public async Task<Country> GetCountriesDetailsById(int id)
+        {
+            Country student = new Country();
+
+            using (SqlConnection con = new SqlConnection(connectionstring))
+            {
+                // string sqlQuery = "SELECT * FROM Countries WHERE Id= " + id;//inline query usage 
+
+                SqlCommand cmd = new SqlCommand("Usp_GetCountryDetailsById", con);
+                cmd.Parameters.AddWithValue("@id", id);
+                con.Open();
+                cmd.CommandType = CommandType.StoredProcedure;
+                SqlDataReader rdr = await cmd.ExecuteReaderAsync();
+
+                while (rdr.Read())
+                {
+                    student.Id = Convert.ToInt32(rdr["id"]);
+                    student.countryName = rdr["countryName"].ToString();
+
+                }
+            }
+            return student;
+        }
+
+        public async Task<bool> UpdateCountryDetils(Country countryDetail)
+        {
+            using (SqlConnection con = new SqlConnection(connectionstring))
+            {
+                SqlCommand cmd = new SqlCommand("Usp_UpdateCountries", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@id", countryDetail.Id);
+                cmd.Parameters.AddWithValue("@countryName", countryDetail.countryName);
+
+                con.Open();
+                await cmd.ExecuteNonQueryAsync();
+                con.Close();
+            }
+            return true;
         }
     }
 }
