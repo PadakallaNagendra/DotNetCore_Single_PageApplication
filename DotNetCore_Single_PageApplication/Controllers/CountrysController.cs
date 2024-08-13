@@ -19,7 +19,7 @@ namespace DotNetCore_Single_PageApplication.Controllers
         {
             try
             {
-                var countrys = await _countryService.GetCountryDTOs();
+                var countrys = await _countryService.GetAllCountry();
                 //var employeeData = _EmployeeManager.GetAllEmployeeDetails();
                 if (countrys != null)
                 {
@@ -97,7 +97,7 @@ namespace DotNetCore_Single_PageApplication.Controllers
                 }
                 else
                 {
-                    var Data = await _countryService.DeleteCountryDetilsById(id);
+                    //var Data = await _countryService.DeleteCountryDetilsById(id);
                     return StatusCode(StatusCodes.Status204NoContent, "country details deleted successfully");
                 }
             }

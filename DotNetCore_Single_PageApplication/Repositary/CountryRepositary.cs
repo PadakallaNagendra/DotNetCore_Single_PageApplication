@@ -14,11 +14,14 @@ namespace DotNetCore_Single_PageApplication.Repositary
             using (SqlConnection con = new SqlConnection(connectionstring))//here we are getting the conection string
             {
                 SqlCommand cmd = new SqlCommand("Usp_AddCountries", con);
+                
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@id", countryDetail.Id);
                 cmd.Parameters.AddWithValue("@countryName", countryDetail.countryName);
-
+                cmd.Parameters.AddWithValue("@customername", countryDetail.customername);
+                cmd.Parameters.AddWithValue("@Email", countryDetail.email);
+                cmd.Parameters.AddWithValue("@city", countryDetail.city);
                 con.Open();
                 await cmd.ExecuteNonQueryAsync();//used for insert,update delete
                                                  // cmd.ExecuteScalar();//used in aggregation operation[max,min,count..]
@@ -59,7 +62,10 @@ namespace DotNetCore_Single_PageApplication.Repositary
                     Country obj = new Country();
                     obj.Id = Convert.ToInt32(r1["Id"]);
                     obj.countryName = Convert.ToString(r1["countryName"]);
-                    
+                    obj.customername = Convert.ToString(r1["customername"]);
+                    obj.email = Convert.ToString(r1["Email"]);
+                    obj.city = Convert.ToString(r1["city"]);
+
                     result.Add(obj);
 
                 }
@@ -86,7 +92,9 @@ namespace DotNetCore_Single_PageApplication.Repositary
                 {
                     student.Id = Convert.ToInt32(rdr["id"]);
                     student.countryName = rdr["countryName"].ToString();
-
+                    student.customername = rdr["customername"].ToString();
+                    student.email = rdr["Email"].ToString();
+                    student.city = rdr["city"].ToString();
                 }
             }
             return student;
@@ -100,7 +108,9 @@ namespace DotNetCore_Single_PageApplication.Repositary
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@id", countryDetail.Id);
                 cmd.Parameters.AddWithValue("@countryName", countryDetail.countryName);
-
+                cmd.Parameters.AddWithValue("@customername",countryDetail.customername);
+                cmd.Parameters.AddWithValue("@Email", countryDetail.email);
+                cmd.Parameters.AddWithValue("@city", countryDetail.city);
                 con.Open();
                 await cmd.ExecuteNonQueryAsync();
                 con.Close();

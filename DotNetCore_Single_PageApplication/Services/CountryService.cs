@@ -17,6 +17,9 @@ namespace DotNetCore_Single_PageApplication.Services
             Country obj = new Country();
             obj.Id = countryDetaildto.Id;
             obj.countryName = countryDetaildto.countryName;
+            obj.customername= countryDetaildto.customername;
+            obj.email= countryDetaildto.email;
+            obj.city= countryDetaildto.city;
 
 
             await _countryRepositary.AddCountryDetails(obj);
@@ -36,10 +39,13 @@ namespace DotNetCore_Single_PageApplication.Services
             CountryDTO countriesdtoobj = new CountryDTO();
             countriesdtoobj.Id = countriesObj.Id;
             countriesdtoobj.countryName = countriesObj.countryName;
+            countriesdtoobj.customername = countriesObj.customername;
+            countriesdtoobj.email = countriesObj.email;
+            countriesdtoobj.city = countriesObj.city;
             return countriesdtoobj;
         }
 
-        public async Task<List<CountryDTO>> GetCountryDTOs()
+        public async Task<List<CountryDTO>> GetAllCountry()
         {
             List<CountryDTO> objCountriesDto = new List<CountryDTO>();
             var result = await _countryRepositary.GetAllCountry();
@@ -48,6 +54,9 @@ namespace DotNetCore_Single_PageApplication.Services
                 CountryDTO obj = new CountryDTO();
                 obj.Id = countriesObj.Id;
                 obj.countryName = countriesObj.countryName;
+                obj.customername = countriesObj.customername;
+                obj.city = countriesObj.city;
+                obj.email = countriesObj.email;
                 objCountriesDto.Add(obj);
             }
             return objCountriesDto;
@@ -58,7 +67,9 @@ namespace DotNetCore_Single_PageApplication.Services
             Country obj = new Country();
             obj.Id = countryDetaildto.Id;
             obj.countryName = countryDetaildto.countryName;
-
+            obj.customername = countryDetaildto.customername;
+            obj.email = countryDetaildto.email;
+            obj.city = countryDetaildto.city;
             await _countryRepositary.UpdateCountryDetils(obj);
             return true;
         }
